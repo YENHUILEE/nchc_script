@@ -13,10 +13,10 @@
 
 echo "processes directories"
 # fold to be set
-fastq_folder="/work/u3003390/FASTQ/" #data fold
+fastq_folder="/work/u3003390/FASTQ" #data fold
 JOBDIR="/work/u3003390/"
 SampleName="MG244"
-release_dir="/work/u3003390/RESUL/"
+release_dir="/work/u3003390/RESULT"
 
 cd $JOBDIR
 set -euo pipefail
