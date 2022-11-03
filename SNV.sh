@@ -30,7 +30,7 @@ platform="ILLUMINA"
 
 
 # Update with the location of the reference data files (hg 19)
-ref_dir="/staging/reserve/paylong_ntu/AI_SHARE/reference/GATK_bundle/2.8/hg19"
+ref_dir="/staging/reserve/paylong_ntu/AI_SHARE/reference"
 fasta="${ref_dir}/ucsc.hg19.fasta"
 dbsnp="${ref_dir}/dbsnp_138.hg19.vcf"
 known_Mills_indels="${ref_dir}/Mills_and_1000G_gold_standard.indels.hg19.sites.vcf"
