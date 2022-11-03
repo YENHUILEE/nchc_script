@@ -83,9 +83,8 @@ cd $workdir
 
 echo "STEP 2: Map to reference using BWA-MEM"
 
-# BWA index reference 
-
-bwa index ${fasta}
+# BWA index reference (already in reference fold)
+# bwa index ${fasta}
 
 # BWA alignment
 bwa mem -t 4 -R "@RG\tID:SRR062634\tPL:ILLUMINA\tSM:SRR062634" ${fasta} ${fastq_1} ${fastq_2} > ${aligned_reads}/${SampleName}.paired.sam
