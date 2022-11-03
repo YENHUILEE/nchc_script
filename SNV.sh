@@ -91,13 +91,13 @@ cd $workdir
 
 
 
-# -----------------------------------------
-# STEP 3: Mark Duplicates and Sort - GATK4
-# -----------------------------------------
+# # -----------------------------------------
+# # STEP 3: Mark Duplicates and Sort - GATK4
+# # -----------------------------------------
 
-echo "STEP 3: Mark Duplicates and Sort - GATK4"
-ml biology/GATK
-gatk MarkDuplicatesSpark -I ${workdir}/${SampleName}.paired.sam -O ${workdir}/${SampleName}_sorted_dedup_reads.bam
+# echo "STEP 3: Mark Duplicates and Sort - GATK4"
+# ml biology/GATK
+# gatk MarkDuplicatesSpark -I ${workdir}/${SampleName}.paired.sam -O ${workdir}/${SampleName}_sorted_dedup_reads.bam
 
 
 
@@ -106,14 +106,14 @@ gatk MarkDuplicatesSpark -I ${workdir}/${SampleName}.paired.sam -O ${workdir}/${
 # # ----------------------------------
 
 
-# echo "STEP 4: Base quality recalibration"
+echo "STEP 4: Base quality recalibration"
 
-# # 1. build the model
-# gatk BaseRecalibrator -I ${aligned_reads}/SRR062634_sorted_dedup_reads.bam -R ${ref} --known-sites ${known_sites} -O ${data}/recal_data.table
+# 1. build the model
+gatk BaseRecalibrator -I ${workdir}/${SampleName}_sorted_dedup_reads.bam -R $fasta --known-sites ${dbsnp} -O ${workdir}/recal_data.table
 
 
-# # 2. Apply the model to adjust the base quality scores
-# gatk ApplyBQSR -I ${aligned_reads}/SRR062634_sorted_dedup_reads.bam -R ${ref} --bqsr-recal-file {$data}/recal_data.table -O ${aligned_reads}/SRR062634_sorted_dedup_bqsr_reads.bam 
+# 2. Apply the model to adjust the base quality scores
+gatk ApplyBQSR -I ${workdir}/${SampleName}_sorted_dedup_reads.bam -R $fasta --bqsr-recal-file ${workdir}/recal_data.table -O ${workdir}/SRR062634_sorted_dedup_bqsr_reads.bam 
 
 
 
