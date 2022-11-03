@@ -7,7 +7,7 @@
 #SBATCH --mem=46g           # 使用的記憶體量 請參考Queue資源設定
 #SBATCH -o out.log          # Path to the standard output file 
 #SBATCH -e err.log          # Path to the standard error ouput file
-#SBATCH --mail-k32650805@gmail.com    # email
+#SBATCH --mail-user=k32650805@gmail.com    # email
 #SBATCH --mail-type=FAIL              # 指定送出email時機 可為NONE, BEGIN, END, FAIL, REQUEUE, ALL
 
 
