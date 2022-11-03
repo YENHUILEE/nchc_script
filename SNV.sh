@@ -87,6 +87,7 @@ echo "STEP 2: Map to reference using BWA-MEM"
 # bwa index ${fasta}
 
 # BWA alignment
+ml biology/BWA
 bwa mem -t 4 -R "@RG\tID:SRR062634\tPL:ILLUMINA\tSM:SRR062634" ${fasta} ${fastq_1} ${fastq_2} > ${aligned_reads}/${SampleName}.paired.sam
 
 
