@@ -106,26 +106,26 @@ cd $workdir
 # # ----------------------------------
 
 
-echo "STEP 4: Base quality recalibration"
+# echo "STEP 4: Base quality recalibration"
 
-# 1. build the model
-gatk BaseRecalibrator -I ${workdir}/${SampleName}_sorted_dedup_reads.bam -R $fasta --known-sites ${dbsnp} -O ${workdir}/recal_data.table
-
-
-# 2. Apply the model to adjust the base quality scores
-gatk ApplyBQSR -I ${workdir}/${SampleName}_sorted_dedup_reads.bam -R $fasta --bqsr-recal-file ${workdir}/recal_data.table -O ${workdir}/SRR062634_sorted_dedup_bqsr_reads.bam 
+# # 1. build the model
+# gatk BaseRecalibrator -I ${workdir}/${SampleName}_sorted_dedup_reads.bam -R $fasta --known-sites ${dbsnp} -O ${workdir}/recal_data.table
 
 
-
-# # -----------------------------------------------
-# # STEP 5: Collect Alignment & Insert Size Metrics
-# # -----------------------------------------------
+# # 2. Apply the model to adjust the base quality scores
+# gatk ApplyBQSR -I ${workdir}/${SampleName}_sorted_dedup_reads.bam -R $fasta --bqsr-recal-file ${workdir}/recal_data.table -O ${workdir}/SRR062634_sorted_dedup_bqsr_reads.bam 
 
 
-# echo "STEP 5: Collect Alignment & Insert Size Metrics"
 
-# gatk CollectAlignmentSummaryMetrics R=${ref} I=${aligned_reads}/SRR062634_sorted_dedup_bqsr_reads.bam O=${aligned_reads}/alignment_metrics.txt
-# gatk CollectInsertSizeMetrics INPUT=${aligned_reads}/SRR062634_sorted_dedup_bqsr_reads.bam OUTPUT=${aligned_reads}/insert_size_metrics.txt HISTOGRAM_FILE=${aligned_reads}/insert_size_histogram.pdf
+# -----------------------------------------------
+# STEP 5: Collect Alignment & Insert Size Metrics
+# -----------------------------------------------
+
+
+echo "STEP 5: Collect Alignment & Insert Size Metrics"
+
+gatk CollectAlignmentSummaryMetrics R=${fasta} I=${workdir}/SRR062634_sorted_dedup_bqsr_reads.bam  O=${workdir}/alignment_metrics.txt
+gatk CollectInsertSizeMetrics INPUT=${workdir}/SRR062634_sorted_dedup_bqsr_reads.bam OUTPUT=${workdir}/insert_size_metrics.txt HISTOGRAM_FILE=${workdir}/insert_size_histogram.pdf
 
 
 
