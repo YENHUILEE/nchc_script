@@ -70,7 +70,7 @@ cd $workdir
 # -------------------
 
 echo "STEP 1: QC - Run fastqc"
-
+ml biology/FastQC
 fastqc ${fastq_1} -o ${release_dir}/
 fastqc ${fastq_2} -o ${release_dir}/
 
