@@ -113,7 +113,7 @@ cd $workdir
 
 
 # # 2. Apply the model to adjust the base quality scores
-# gatk ApplyBQSR -I ${workdir}/${SampleName}_sorted_dedup_reads.bam -R $fasta --bqsr-recal-file ${workdir}/recal_data.table -O ${workdir}/SRR062634_sorted_dedup_bqsr_reads.bam 
+# gatk ApplyBQSR -I ${workdir}/${SampleName}_sorted_dedup_reads.bam -R $fasta --bqsr-recal-file ${workdir}/recal_data.table -O ${workdir}/${SampleName}_sorted_dedup_bqsr_reads.bam 
 
 
 
@@ -122,20 +122,21 @@ cd $workdir
 # -----------------------------------------------
 
 
-echo "STEP 5: Collect Alignment & Insert Size Metrics"
+# echo "STEP 5: Collect Alignment & Insert Size Metrics"
 
-gatk CollectAlignmentSummaryMetrics R=${fasta} I=${workdir}/SRR062634_sorted_dedup_bqsr_reads.bam  O=${workdir}/alignment_metrics.txt
-gatk CollectInsertSizeMetrics INPUT=${workdir}/SRR062634_sorted_dedup_bqsr_reads.bam OUTPUT=${workdir}/insert_size_metrics.txt HISTOGRAM_FILE=${workdir}/insert_size_histogram.pdf
+# gatk CollectAlignmentSummaryMetrics R=${fasta} I=${workdir}/${SampleName}_sorted_dedup_bqsr_reads.bam  O=${workdir}/alignment_metrics.txt
+# gatk CollectInsertSizeMetrics INPUT=${workdir}/${SampleName}_sorted_dedup_bqsr_reads.bam OUTPUT=${workdir}/insert_size_metrics.txt HISTOGRAM_FILE=${workdir}/insert_size_histogram.pdf
 
 
 
-# # ----------------------------------------------
-# # STEP 6: Call Variants - gatk haplotype caller
-# # ----------------------------------------------
+# ----------------------------------------------
+# STEP 6: Call Variants - gatk haplotype caller
+# ----------------------------------------------
 
-# echo "STEP 6: Call Variants - gatk haplotype caller"
+echo "STEP 6: Call Variants - gatk haplotype caller"
 
-# gatk HaplotypeCaller -R ${ref} -I ${aligned_reads}/SRR062634_sorted_dedup_bqsr_reads.bam -O ${results}/raw_variants.vcf
+gatk HaplotypeCaller -R ${refastaf} -I ${workdir}/SRR062634_sorted_dedup_bqsr_reads.bam -O ${release_dir}/${SampleName}_raw_variants.vcf
+# gatk HaplotypeCaller -R ${refastaf} -I ${workdir}/${SampleName}_sorted_dedup_bqsr_reads.bam -O ${release_dir}/${SampleName}_raw_variants.vcf
 
 
 
