@@ -135,8 +135,8 @@ cd $workdir
 
 echo "STEP 6: Call Variants - gatk haplotype caller"
 
-gatk HaplotypeCaller -R ${refastaf} -I ${workdir}/SRR062634_sorted_dedup_bqsr_reads.bam -O ${release_dir}/${SampleName}_raw_variants.vcf
-# gatk HaplotypeCaller -R ${refastaf} -I ${workdir}/${SampleName}_sorted_dedup_bqsr_reads.bam -O ${release_dir}/${SampleName}_raw_variants.vcf
+gatk HaplotypeCaller -R ${fasta} -I ${workdir}/SRR062634_sorted_dedup_bqsr_reads.bam -O ${release_dir}/${SampleName}_raw_variants.vcf
+# gatk HaplotypeCaller -R ${fasta} -I ${workdir}/${SampleName}_sorted_dedup_bqsr_reads.bam -O ${release_dir}/${SampleName}_raw_variants.vcf
 
 
 
