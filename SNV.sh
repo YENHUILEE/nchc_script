@@ -1,6 +1,6 @@
 #!/bin/bash
 #!/usr/bin/sh
-#SBATCH -A u3003390/TRI1113046        # Account name/project number
+#SBATCH -A TRI1113046        # Account name/project number
 #SBATCH -J SAMPLE_NAME         # Job name
 #SBATCH -p ngs48G           # Partition Name 等同PBS裡面的 -q Queue name
 #SBATCH -c 14               # 使用的core數 請參考Queue資源設定 
