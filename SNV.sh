@@ -65,31 +65,30 @@ exec >$logfile 2>&1
 cd $workdir
 
 
-# -------------------
-# STEP 1: QC - Run fastqc 
-# -------------------
+# # -------------------
+# # STEP 1: QC - Run fastqc 
+# # -------------------
 
-echo "STEP 1: QC - Run fastqc"
-ml biology/FastQC
-fastqc ${fastq_1} -o ${release_dir}/
-fastqc ${fastq_2} -o ${release_dir}/
+# echo "STEP 1: QC - Run fastqc"
+# ml biology/FastQC
+# fastqc ${fastq_1} -o ${release_dir}/
+# fastqc ${fastq_2} -o ${release_dir}/
 
-# No trimming required, quality looks okay.
-
-
-# # --------------------------------------
-# # STEP 2: Map to reference using BWA-MEM
-# # --------------------------------------
-
-# echo "STEP 2: Map to reference using BWA-MEM"
-
-# # BWA index reference 
-# bwa index ${ref}
+# # No trimming required, quality looks okay.
 
 
-# # BWA alignment
-# bwa mem -t 4 -R "@RG\tID:SRR062634\tPL:ILLUMINA\tSM:SRR062634" ${ref} ${reads}/SRR062634_1.filt.fastq.gz ${reads}/SRR062634_2.filt.fastq.gz > ${aligned_reads}/SRR062634.paired.sam
+# --------------------------------------
+# STEP 2: Map to reference using BWA-MEM
+# --------------------------------------
 
+echo "STEP 2: Map to reference using BWA-MEM"
+
+# BWA index reference 
+
+bwa index ${fasta}
+
+# BWA alignment
+bwa mem -t 4 -R "@RG\tID:SRR062634\tPL:ILLUMINA\tSM:SRR062634" ${fasta} ${fastq_1} ${fastq_2} > ${aligned_reads}/${SampleName}.paired.sam
 
 
 
