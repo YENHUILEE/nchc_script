@@ -77,27 +77,27 @@ cd $workdir
 # # No trimming required, quality looks okay.
 
 
-# --------------------------------------
-# STEP 2: Map to reference using BWA-MEM
-# --------------------------------------
+# # --------------------------------------
+# # STEP 2: Map to reference using BWA-MEM
+# # --------------------------------------
 
-echo "STEP 2: Map to reference using BWA-MEM"
+# echo "STEP 2: Map to reference using BWA-MEM"
 
-# BWA index reference (already in reference fold)
-# bwa index ${fasta}
+# # BWA index reference (already in reference fold)
+# # bwa index ${fasta}
 
-# BWA alignment
-bwa mem -t 4 -R "@RG\tID:SRR062634\tPL:ILLUMINA\tSM:SRR062634" $fasta $fastq_1 $fastq_2 > ${workdir}/${SampleName}.paired.sam
+# # BWA alignment
+# bwa mem -t 4 -R "@RG\tID:SRR062634\tPL:ILLUMINA\tSM:SRR062634" $fasta $fastq_1 $fastq_2 > ${workdir}/${SampleName}.paired.sam
 
 
 
-# # -----------------------------------------
-# # STEP 3: Mark Duplicates and Sort - GATK4
-# # -----------------------------------------
+# -----------------------------------------
+# STEP 3: Mark Duplicates and Sort - GATK4
+# -----------------------------------------
 
-# echo "STEP 3: Mark Duplicates and Sort - GATK4"
+echo "STEP 3: Mark Duplicates and Sort - GATK4"
 
-# gatk MarkDuplicatesSpark -I ${aligned_reads}/SRR062634.paired.sam -O ${aligned_reads}/SRR062634_sorted_dedup_reads.bam
+gatk MarkDuplicatesSpark -I ${workdir}/${SampleName}.paired.sam -O ${workdir}/${SampleName}_sorted_dedup_reads.bam
 
 
 
