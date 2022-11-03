@@ -96,7 +96,7 @@ cd $workdir
 # -----------------------------------------
 
 echo "STEP 3: Mark Duplicates and Sort - GATK4"
-
+ml biology/GATK
 gatk MarkDuplicatesSpark -I ${workdir}/${SampleName}.paired.sam -O ${workdir}/${SampleName}_sorted_dedup_reads.bam
 
 
