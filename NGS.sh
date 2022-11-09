@@ -51,6 +51,7 @@ exec >$logfile 2>&1
 #module loading#
 module load biology/BWA/0.7.17
 module load biology/Picard/2.27.4
+ml load biology/GATK/4.2.3.0
 
 # #bwa mem (fastq -> sam)
 # bwa mem \
@@ -71,29 +72,28 @@ module load biology/Picard/2.27.4
 # METRICS_FILE=${temp_dir}/${sample_id}.${Date}.bwamem_metrics #file to write duplication metrices\
 # VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-#FixMateInformation (bwamem.marked.fixed.bam)
-picard FixMateInformation \
-INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
-OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
-ADD_MATE_CIGAR=true\
-SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
-#
-# #BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
-# ml load biology/GATK/4.2.3.0
-# gatk
-# -T BaseRecalibrator \
-# -R $fasta \
-# -knownSites $dbsnp \
-# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
-# -o ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
-# -rf BadCigar -nct 16 && 
+# #FixMateInformation (bwamem.marked.fixed.bam)
+# picard FixMateInformation \
+# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
+# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+# ADD_MATE_CIGAR=true\
+# SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-# # ApplyBQSR (to be edited)
-# gatk ApplyBQSR \
-# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
-# -R $fasta \
-# --bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
-# -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
+#BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
+gatk
+-T BaseRecalibrator \
+-R $fasta \
+-knownSites $dbsnp \
+-I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+-o ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
+-rf BadCigar -nct 16 && 
+
+# ApplyBQSR (to be edited)
+gatk ApplyBQSR \
+-I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+-R $fasta \
+--bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
+-O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
 
 # #SortSam (bwamem.marked.fixed.recal.indexed.bam)
 # picard SortSam \
