@@ -97,7 +97,7 @@ ml load biology/GATK/4.2.3.0
 picard SortSam \
 INPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam \
 OUTPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
-SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true &&
+SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
 # #change name (indexed.bai->indexed.bam.bai)?
 # cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bai \
