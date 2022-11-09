@@ -56,18 +56,18 @@ exec >$logfile 2>&1
 # > ${temp_dir}/${sample_id}.${Date}.bwamem.sam 
 
 #Sortsam (sam -> bwamem.bam)#
-module load biology/Picard/2.27.4
-picard SortSam \
-INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.sam \
-OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
-SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
+# module load biology/Picard/2.27.4
+# picard SortSam \
+# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.sam \
+# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
+# SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-# #MarkDuplication (bwamem.bam->bwamem.marked.bam)#
-# picard MarkDuplicates \
-# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
-# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
-# METRICS_FILE=${temp_dir}/${sample_id}.${Date}.bwamem_metrics #file to write duplication metrices\
-# VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true &&
+#MarkDuplication (bwamem.bam->bwamem.marked.bam)#
+picard MarkDuplicates \
+INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
+OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
+METRICS_FILE=${temp_dir}/${sample_id}.${Date}.bwamem_metrics #file to write duplication metrices\
+VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
 
 # #FixMateInformation (bwamem.marked.realigned.fixed.bam)
