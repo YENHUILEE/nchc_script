@@ -77,7 +77,7 @@ INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
 OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
 ADD_MATE_CIGAR=true\
 SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
-
+#
 # #BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
 # ml load biology/GATK/4.2.3.0
 # gatk
