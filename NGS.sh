@@ -8,13 +8,12 @@
 #SBATCH --mail-type=FAIL,END
 
 # This code is used for NGS germline variant calling (SNV + Indels)
-# 用 “&&” 分開兩個指令, 即第一道指令執行成功後, 才會執行第二道指令
 
 echo "processes directories"
 # before start, you should copy the fastq to fastq_folder
 # fold to be set
 sample_id="MG244" #change as you needed
-user_dir="/work/u3003390/"
+user_dir="/work/u3003390"
 fastq_dir="/work/u3003390/FASTQ" #data fold
 temp_dir="/work/u3003390/TEMP"
 release_dir="/work/u3003390/RESULT"
@@ -42,7 +41,7 @@ nt=40 #number of threads to use in computation
 # Set working directory
 Time=`date +%Y/%m/%d %H:%M`
 Date=`date +%Y/%m/%d`
-logfile=$temp_dir/${Time}_run.log
+logfile=${temp_dir}/${Time}_run.log
 set -x
 exec 3<&1 4<&2 #???
 exec >$logfile 2>&1
@@ -51,30 +50,30 @@ exec >$logfile 2>&1
 module load biology/BWA/0.7.17
 bwa mem \
 -t 16 -R '@RG\tID:MG244_20220923_bwamem\tLB:MG244_20220923_bwamem\tSM:MG244_20220923_bwamem\tPL:ILLUMINA\' \
-$fasta \
-$fastq_1 \
-$fastq_2 \
-> $temp_dir/${sample_id}.$Date.bwamem.sam &&
+${fasta} \
+${fastq_1} \
+${fastq_2} \
+> ${temp_dir}/${sample_id}.${Date}.bwamem.sam &&
 
 # #Sortsam (sam -> bwamem.bam)#
 # module load biology/Picard/2.27.4
 # picard SortSam \
-# INPUT=$temp_dir/${sample_id}.$Date.bwamem.sam \
-# OUTPUT=$temp_dir/${sample_id}.$Date.bwamem.bam \
+# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.sam \
+# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
 # SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true &&
 
 # #MarkDuplication (bwamem.bam->bwamem.marked.bam)#
 # picard MarkDuplicates \
-# INPUT=$temp_dir/${sample_id}.$Date.bwamem.bam \
-# OUTPUT=$temp_dir/${sample_id}.$Date.bwamem.marked.bam \
-# METRICS_FILE=$temp_dir/${sample_id}.$Date.bwamem_metrics #file to write duplication metrices\
+# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
+# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
+# METRICS_FILE=${temp_dir}/${sample_id}.${Date}.bwamem_metrics #file to write duplication metrices\
 # VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true &&
 
 
 # #FixMateInformation (bwamem.marked.realigned.fixed.bam)
 # picard FixMateInformation \
-# INPUT=$temp_dir/${sample_id}.bwamem.marked.realigned.bam \
-# OUTPUT=$temp_dir/${sample_id}.bwamem.marked.realigned.fixed.bam \
+# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.bam \
+# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam \
 # SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true && 
 
 # #BaseRecalibrator (bwamem.marked.realigned.fixed.bam.recal_data.grp)
@@ -83,26 +82,26 @@ $fastq_2 \
 # -T BaseRecalibrator \
 # -R $fasta \
 # -knownSites $dbsnp \
-# -I $temp_dir/${sample_id}.bwamem.marked.realigned.fixed.bam \
-# -o $temp_dir/${sample_id}.bwamem.marked.realigned.fixed.bam.recal_data.table \
+# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam \
+# -o ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam.recal_data.table \
 # -rf BadCigar -nct 16 && 
 
 # # ApplyBQSR (to be edited)
 # gatk ApplyBQSR \
-# -I $temp_dir/${sample_id}.bwamem.marked.realigned.fixed.bam \
+# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam \
 # -R $fasta \
-# --bqsr-recal-file $temp_dir/${sample_id}.bwamem.marked.realigned.fixed.bam.recal_data.table \
-# -O $temp_dir/${sample_id}.bwamem.marked.realigned.fixed.recal.bam
+# --bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam.recal_data.table \
+# -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.recal.bam
 
 # #SortSam (bwamem.marked.realigned.fixed.recal.indexed.bam)
 # picard SortSam \
-# INPUT= $temp_dir/${sample_id}.bwamem.marked.realigned.fixed.recal.bam \
-# OUTPUT= $temp_dir/${sample_id}.bwamem.marked.realigned.fixed.recal.indexed.bam \
+# INPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.recal.bam \
+# OUTPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.recal.indexed.bam \
 # SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true &&
 
 # #change name (indexed.bai->indexed.bam.bai)?
-# cp $temp_dir/${sample_id}.bwamem.marked.realigned.fixed.recal.indexed.bai \
-#    $temp_dir/${sample_id}.bwamem.marked.realigned.fixed.recal.indexed.bam.bai
+# cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.recal.indexed.bai \
+#    ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.recal.indexed.bam.bai
 
 # #HaplotypeCaller (bwamem.marked.realigned.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
 # gatk \
@@ -110,39 +109,39 @@ $fastq_2 \
 # -l INFO \
 # #?
 # -R /home/u1151339/reference/ucsc.hg19.NC_012920.fasta \
-# -I $temp_dir/${sample_id}.bwamem.marked.realigned.fixed.recal.indexed.bam \
+# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.recal.indexed.bam \
 # --emitRefConfidence GVCF \
 # # --variant_index_type LINEAR \
 # # --variant_index_parameter 128000  \
 # --dbsnp $dbsnp \
 # --max_alternate_alleles 30 \ 
 # #why 30?
-# -o $temp_dir/${sample_id}.bwamem.haplotype.SnpIndel.g.vcf.gz \
+# -o ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
 # -nct 16 
 
 # #GenotypeGVCFs (g.vcf -> vcf)
 # gatk \
 # -T GenotypeGVCFs \
 # -R $fasta \
-# -V $temp_dir/${sample_id}.bwamem.haplotype.SnpIndel.g.vcf.gz \
-# -o $temp_dir/${sample_id}.bwamem.haplotype.SnpIndel.vcf.gz 
+# -V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
+# -o ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz 
 
 # #VariantFiltration (vcf -> filtered.vcf)
 # gatk \
 # -T VariantFiltration \
 # -R $fasta \
-# --variant $temp_dir/${sample_id}.bwamem.haplotype.SnpIndel.vcf.gz\
-# -o $temp_dir/${sample_id}.bwamem.haplotype.SnpIndel.filtered.vcf.gz \
+# --variant ${temp_dir}/${sample_id}.${Date}..bwamem.haplotype.SnpIndel.vcf.gz\
+# -o ${temp_dir}/${sample_id}.${Date}..bwamem.haplotype.SnpIndel.filtered.vcf.gz \
 # --clusterWindowSize 10 \
 # --filterExpression "DP < 5" --filterName "LowCoverage" --filterExpression "QUAL < 30.0" --filterName "VeryLowQual" --filterExpression "QUAL > 30.0 && QUAL < 50.0" --filterName "LowQual" --filterExpression "QD < 1.5" --filterName "LowQD" 
 
 # #exec table_annovar.pl 
 # module load biology/ANNOVAR/2020-06-08
 # table_annovar.pl \
-# $temp_dir/${sample_id}.bwamem.filtered.haplotype.SnpIndel.vcf.gz \
+# ${temp_dir}/${sample_id}.${Date}..bwamem.filtered.haplotype.SnpIndel.vcf.gz \
 # /staging/reserve/paylong_ntu/AI_SHARE/reference/annovar_2016Feb01/humandb/ \
 # -buildver hg19 \
-# -out $release_dir/${sample_id}.annotate \
+# -out ${release_dir}/${sample_id}.${Date}..annotate \
 # -remove \
 # -protocol refGene,cytoBand,knownGene,ensGene,gnomad211_genome,avsnp150,TaiwanBiobank-official,gnomad211_exome,TWB_1497_joing_calling_AF,intervar_20180118,clinvar_20210501,cosmic_coding_GRCh37_v92,cosmic_noncoding_GRCh37_v92,icgc28,dbnsfp41a,cg69,kaviar_20150923,dbscsnv11,spidex,gwava,wgRna,targetScanS \
 # -operation gx,r,gx,gx,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f \
