@@ -105,8 +105,6 @@ ml load biology/GATK/4.2.3.0
 
 #HaplotypeCaller (bwamem.marked.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
 gatk HaplotypeCaller  \
--l INFO \
-#?
 -R /home/u1151339/reference/ucsc.hg19.NC_012920.fasta \
 -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
 --emitRefConfidence GVCF \
@@ -116,7 +114,6 @@ gatk HaplotypeCaller  \
 --max_alternate_alleles 30 \ 
 #why 30?
 -o ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
--nct 16 
 
 # #GenotypeGVCFs (g.vcf -> vcf)
 # gatk \
