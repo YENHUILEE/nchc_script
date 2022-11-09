@@ -119,7 +119,7 @@ ml load biology/GATK/4.2.3.0
 gatk  GenotypeGVCFs \
 -R $fasta \
 -V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
--o ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz 
+-O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz 
 
 # #VariantFiltration (vcf -> filtered.vcf)
 # gatk \
