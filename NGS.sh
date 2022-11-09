@@ -115,20 +115,19 @@ ml load biology/GATK/4.2.3.0
 # --variant_index_type LINEAR \
 # --variant_index_parameter 128000  \
 
-#GenotypeGVCFs (g.vcf -> vcf)
-gatk  GenotypeGVCFs \
--R $fasta \
--V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
--O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz 
-
-# #VariantFiltration (vcf -> filtered.vcf)
-# gatk \
-# -T VariantFiltration \
+# #GenotypeGVCFs (g.vcf -> vcf)
+# gatk  GenotypeGVCFs \
 # -R $fasta \
-# --variant ${temp_dir}/${sample_id}.${Date}..bwamem.haplotype.SnpIndel.vcf.gz\
-# -o ${temp_dir}/${sample_id}.${Date}..bwamem.haplotype.SnpIndel.filtered.vcf.gz \
-# --clusterWindowSize 10 \
-# --filterExpression "DP < 5" --filterName "LowCoverage" --filterExpression "QUAL < 30.0" --filterName "VeryLowQual" --filterExpression "QUAL > 30.0 && QUAL < 50.0" --filterName "LowQual" --filterExpression "QD < 1.5" --filterName "LowQD" 
+# -V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
+# -O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz 
+
+#VariantFiltration (vcf -> filtered.vcf)
+gatk VariantFiltration \
+-R $fasta \
+-V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz\
+-O ${temp_dir}/${sample_id}.${Date}..bwamem.haplotype.SnpIndel.filtered.vcf.gz \
+-window 10 \
+-filter "DP < 5" --filterName "LowCoverage" --filterExpression "QUAL < 30.0" --filterName "VeryLowQual" --filterExpression "QUAL > 30.0 && QUAL < 50.0" --filterName "LowQual" --filterExpression "QD < 1.5" --filterName "LowQD" 
 
 # #exec table_annovar.pl 
 # module load biology/ANNOVAR/2020-06-08
