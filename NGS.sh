@@ -80,18 +80,18 @@ ml load biology/GATK/4.2.3.0
 # SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
 #BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
-gatk BaseRecalibrator \
--I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
--R $fasta \
--known-sites $dbsnp \
--O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table
-
-# # ApplyBQSR (to be edited)
-# gatk ApplyBQSR \
+# gatk BaseRecalibrator \
 # -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
 # -R $fasta \
-# --bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
-# -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
+# -known-sites $dbsnp \
+# -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table
+
+# ApplyBQSR (to be edited)
+gatk ApplyBQSR \
+-I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+-R $fasta \
+--bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
+-O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
 
 # #SortSam (bwamem.marked.fixed.recal.indexed.bam)
 # picard SortSam \
