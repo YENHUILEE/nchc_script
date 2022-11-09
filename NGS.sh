@@ -80,12 +80,12 @@ ml load biology/GATK/4.2.3.0
 # SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
 #BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
-gatk BaseRecalibrator\
+gatk BaseRecalibrator \
+-I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
 -R $fasta \
 -knownSites $dbsnp \
--I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
--o ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
 -rf BadCigar -nct 16 && 
+-o ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
 
 # ApplyBQSR (to be edited)
 gatk ApplyBQSR \
