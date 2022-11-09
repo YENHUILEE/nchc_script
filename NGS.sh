@@ -80,8 +80,7 @@ ml load biology/GATK/4.2.3.0
 # SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
 #BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
-gatk
--T BaseRecalibrator \
+gatk BaseRecalibrator\
 -R $fasta \
 -knownSites $dbsnp \
 -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
