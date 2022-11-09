@@ -75,6 +75,7 @@ module load biology/Picard/2.27.4
 picard FixMateInformation \
 INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.bam \
 OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam \
+ADD_MATE_CIGAR=true\
 SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
 # #BaseRecalibrator (bwamem.marked.realigned.fixed.bam.recal_data.grp)
