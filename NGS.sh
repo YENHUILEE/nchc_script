@@ -107,13 +107,13 @@ ml load biology/GATK/4.2.3.0
 gatk HaplotypeCaller  \
 -R /home/u1151339/reference/ucsc.hg19.NC_012920.fasta \
 -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
+-O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
 -ERC GVCF \
+--dbsnp $dbsnp \
+--max_alternate_alleles 30  
+#why 30?
 # --variant_index_type LINEAR \
 # --variant_index_parameter 128000  \
---dbsnp $dbsnp \
---max_alternate_alleles 30 \ 
-#why 30?
--O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
 
 # #GenotypeGVCFs (g.vcf -> vcf)
 # gatk \
