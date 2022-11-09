@@ -103,24 +103,23 @@ ml load biology/GATK/4.2.3.0
 # cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bai \
 #    ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam.bai
 
-#HaplotypeCaller (bwamem.marked.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
-gatk HaplotypeCaller  \
--R ${fasta} \
--I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
--O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
--ERC GVCF \
---dbsnp $dbsnp \
---max-alternate-alleles 30  
+# #HaplotypeCaller (bwamem.marked.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
+# gatk HaplotypeCaller  \
+# -R ${fasta} \
+# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
+# -O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
+# -ERC GVCF \
+# --dbsnp $dbsnp \
+# --max-alternate-alleles 30  
 #why 30?
 # --variant_index_type LINEAR \
 # --variant_index_parameter 128000  \
 
-# #GenotypeGVCFs (g.vcf -> vcf)
-# gatk \
-# -T GenotypeGVCFs \
-# -R $fasta \
-# -V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
-# -o ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz 
+#GenotypeGVCFs (g.vcf -> vcf)
+gatk  GenotypeGVCFs \
+-R $fasta \
+-V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
+-o ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz 
 
 # #VariantFiltration (vcf -> filtered.vcf)
 # gatk \
