@@ -1,9 +1,11 @@
 #!/bin/bash
 #SBATCH -p ngs96G
-#SBATCH -c 28
-#SBATCH --mem=92g
+#SBATCH -c 8
+#SBATCH --mem=16g
 #SBATCH -A MST109178
 #SBATCH -J MG244
+#SBATCH -e work/u3003390/err 
+#SBATCH -o work/u3003390/out
 #SBATCH --mail-user=k32650805@gmail.com
 #SBATCH --mail-type=FAIL,END
 
@@ -39,21 +41,21 @@ known_1000G_indels="${ref_dir}/1000G_phase1.indels.hg19.sites.vcf"
 nt=40 #number of threads to use in computation
 
 # Set working directory
-Time=`date +%Y/%m/%d %H:%M`
-Date=`date +%Y/%m/%d`
+Time=`date +%Y%m%d%H%M`
+Date=`date +%Y%m%d`
 logfile=${temp_dir}/${Time}_run.log
 set -x
 exec 3<&1 4<&2 #???
 exec >$logfile 2>&1
 
-#bwa mem (fastq -> sam)
-module load biology/BWA/0.7.17
-bwa mem \
--t 16 -R '@RG\tID:MG244_20220923_bwamem\tLB:MG244_20220923_bwamem\tSM:MG244_20220923_bwamem\tPL:ILLUMINA\' \
-${fasta} \
-${fastq_1} \
-${fastq_2} \
-> ${temp_dir}/${sample_id}.${Date}.bwamem.sam &&
+# #bwa mem (fastq -> sam)
+# module load biology/BWA/0.7.17
+# bwa mem \
+# -t 16 -R '@RG\tID:MG244_20220923_bwamem\tLB:MG244_20220923_bwamem\tSM:MG244_20220923_bwamem\tPL:ILLUMINA\' \
+# ${fasta} \
+# ${fastq_1} \
+# ${fastq_2} \
+# > ${temp_dir}/${sample_id}.${Date}.bwamem.sam &&
 
 # #Sortsam (sam -> bwamem.bam)#
 # module load biology/Picard/2.27.4
