@@ -71,47 +71,47 @@ module load biology/Picard/2.27.4
 # METRICS_FILE=${temp_dir}/${sample_id}.${Date}.bwamem_metrics #file to write duplication metrices\
 # VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-#FixMateInformation (bwamem.marked.realigned.fixed.bam)
+#FixMateInformation (bwamem.marked.fixed.bam)
 picard FixMateInformation \
-INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.bam \
-OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam \
+INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
+OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
 ADD_MATE_CIGAR=true\
 SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-# #BaseRecalibrator (bwamem.marked.realigned.fixed.bam.recal_data.grp)
+# #BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
 # ml load biology/GATK/4.2.3.0
 # gatk
 # -T BaseRecalibrator \
 # -R $fasta \
 # -knownSites $dbsnp \
-# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam \
-# -o ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam.recal_data.table \
+# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+# -o ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
 # -rf BadCigar -nct 16 && 
 
 # # ApplyBQSR (to be edited)
 # gatk ApplyBQSR \
-# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam \
+# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
 # -R $fasta \
-# --bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam.recal_data.table \
-# -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.recal.bam
+# --bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
+# -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
 
-# #SortSam (bwamem.marked.realigned.fixed.recal.indexed.bam)
+# #SortSam (bwamem.marked.fixed.recal.indexed.bam)
 # picard SortSam \
-# INPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.recal.bam \
-# OUTPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.recal.indexed.bam \
+# INPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam \
+# OUTPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
 # SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true &&
 
 # #change name (indexed.bai->indexed.bam.bai)?
-# cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.recal.indexed.bai \
-#    ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.recal.indexed.bam.bai
+# cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bai \
+#    ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam.bai
 
-# #HaplotypeCaller (bwamem.marked.realigned.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
+# #HaplotypeCaller (bwamem.marked.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
 # gatk \
 # -T HaplotypeCaller  \
 # -l INFO \
 # #?
 # -R /home/u1151339/reference/ucsc.hg19.NC_012920.fasta \
-# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.recal.indexed.bam \
+# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
 # --emitRefConfidence GVCF \
 # # --variant_index_type LINEAR \
 # # --variant_index_parameter 128000  \
