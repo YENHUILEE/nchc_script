@@ -104,8 +104,7 @@ ml load biology/GATK/4.2.3.0
 #    ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam.bai
 
 #HaplotypeCaller (bwamem.marked.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
-gatk \
--T HaplotypeCaller  \
+gatk HaplotypeCaller  \
 -l INFO \
 #?
 -R /home/u1151339/reference/ucsc.hg19.NC_012920.fasta \
