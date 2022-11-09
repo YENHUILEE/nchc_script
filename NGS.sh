@@ -113,7 +113,7 @@ gatk HaplotypeCaller  \
 --dbsnp $dbsnp \
 --max_alternate_alleles 30 \ 
 #why 30?
--o ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
+-O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
 
 # #GenotypeGVCFs (g.vcf -> vcf)
 # gatk \
