@@ -83,7 +83,7 @@ ml load biology/GATK/4.2.3.0
 gatk BaseRecalibrator \
 -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
 -R $fasta \
--knownSites $dbsnp \
+-known-sites $dbsnp \
 -rf BadCigar -nct 16 \
 -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table
 
