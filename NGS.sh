@@ -86,18 +86,18 @@ ml load biology/GATK/4.2.3.0
 # -known-sites $dbsnp \
 # -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table
 
-# ApplyBQSR (to be edited)
-gatk ApplyBQSR \
--I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
--R $fasta \
---bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
--O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
+# # ApplyBQSR (to be edited)
+# gatk ApplyBQSR \
+# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+# -R $fasta \
+# --bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
+# -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
 
-# #SortSam (bwamem.marked.fixed.recal.indexed.bam)
-# picard SortSam \
-# INPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam \
-# OUTPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
-# SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true &&
+#SortSam (bwamem.marked.fixed.recal.indexed.bam)
+picard SortSam \
+INPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam \
+OUTPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
+SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true &&
 
 # #change name (indexed.bai->indexed.bam.bai)?
 # cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bai \
