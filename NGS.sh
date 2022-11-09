@@ -84,15 +84,15 @@ gatk BaseRecalibrator \
 -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
 -R $fasta \
 -knownSites $dbsnp \
--rf BadCigar -nct 16 && 
--O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
+-rf BadCigar -nct 16 \
+-O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table
 
-# ApplyBQSR (to be edited)
-gatk ApplyBQSR \
--I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
--R $fasta \
---bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
--O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
+# # ApplyBQSR (to be edited)
+# gatk ApplyBQSR \
+# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+# -R $fasta \
+# --bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
+# -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
 
 # #SortSam (bwamem.marked.fixed.recal.indexed.bam)
 # picard SortSam \
