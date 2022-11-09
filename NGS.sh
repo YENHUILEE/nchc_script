@@ -142,7 +142,13 @@ ${release_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.filtered.vcf.gz \
 -remove \
 -protocol refGene,cytoBand,knownGene,ensGene,gnomad211_genome,avsnp150,TaiwanBiobank-official,gnomad211_exome,TWB_1497_joing_calling_AF,intervar_20180118,clinvar_20210501,cosmic_coding_GRCh37_v92,cosmic_noncoding_GRCh37_v92,icgc28,dbnsfp41a,cg69,kaviar_20150923,dbscsnv11,spidex,gwava,wgRna,targetScanS \
 -operation gx,r,gx,gx,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f \
--arg '-splicing 10',,,,,,,,,,,,,,,,,,,,, -nastring . -vcfinput -polish --maxgenethread 20 --thread 20 
+-arg '-splicing 10',,,,,,,,,,,,,,,,,,,,, \
+-nastring . \
+#set string to NA
+-vcfinput \
+#add VCF at the end of the table 
+-polish \
+--maxgenethread 6 --thread 6 
 
 
 
