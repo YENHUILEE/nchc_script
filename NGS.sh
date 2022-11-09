@@ -105,7 +105,7 @@ ml load biology/GATK/4.2.3.0
 
 #HaplotypeCaller (bwamem.marked.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
 gatk HaplotypeCaller  \
--R /home/u1151339/reference/ucsc.hg19.NC_012920.fasta \
+-R ${fasta} \
 -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
 -O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
 -ERC GVCF \
