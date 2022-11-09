@@ -124,7 +124,7 @@ ml load biology/GATK/4.2.3.0
 #VariantFiltration (vcf -> filtered.vcf)
 gatk VariantFiltration \
 -R $fasta \
--V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz\
+-V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz \
 -O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.filtered.vcf.gz \
 -window 10 \
 -filter "DP < 5" --filter-name "LowCoverage" \
