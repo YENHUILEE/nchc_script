@@ -144,9 +144,7 @@ ${release_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.filtered.vcf.gz \
 -operation gx,r,gx,gx,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f \
 -arg '-splicing 10',,,,,,,,,,,,,,,,,,,,, \
 -nastring . \
-#set string to NA
 -vcfinput \
-#add VCF at the end of the table 
 -polish \
 --maxgenethread 6 --thread 6 
 
