@@ -4,8 +4,8 @@
 #SBATCH --mem=46g
 #SBATCH -A MST109178
 #SBATCH -J MG244
-#SBATCH -e work/u3003390/err 
-#SBATCH -o work/u3003390/out
+#SBATCH -e /work/u3003390/err 
+#SBATCH -o /work/u3003390/out
 #SBATCH --mail-user=k32650805@gmail.com
 #SBATCH --mail-type=FAIL,END
 
