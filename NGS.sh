@@ -56,7 +56,7 @@ exec >$logfile 2>&1
 # > ${temp_dir}/${sample_id}.${Date}.bwamem.sam 
 
 #Sortsam (sam -> bwamem.bam)#
-# module load biology/Picard/2.27.4
+module load biology/Picard/2.27.4
 # picard SortSam \
 # INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.sam \
 # OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
