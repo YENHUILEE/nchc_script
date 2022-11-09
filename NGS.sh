@@ -100,24 +100,24 @@ ml load biology/GATK/4.2.3.0
 # SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
 #change name (indexed.bai->indexed.bam.bai)?
-cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bai \
-   ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam.bai
+# cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bai \
+#    ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam.bai
 
-# #HaplotypeCaller (bwamem.marked.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
-# gatk \
-# -T HaplotypeCaller  \
-# -l INFO \
-# #?
-# -R /home/u1151339/reference/ucsc.hg19.NC_012920.fasta \
-# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
-# --emitRefConfidence GVCF \
-# # --variant_index_type LINEAR \
-# # --variant_index_parameter 128000  \
-# --dbsnp $dbsnp \
-# --max_alternate_alleles 30 \ 
-# #why 30?
-# -o ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
-# -nct 16 
+#HaplotypeCaller (bwamem.marked.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
+gatk \
+-T HaplotypeCaller  \
+-l INFO \
+#?
+-R /home/u1151339/reference/ucsc.hg19.NC_012920.fasta \
+-I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
+--emitRefConfidence GVCF \
+# --variant_index_type LINEAR \
+# --variant_index_parameter 128000  \
+--dbsnp $dbsnp \
+--max_alternate_alleles 30 \ 
+#why 30?
+-o ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
+-nct 16 
 
 # #GenotypeGVCFs (g.vcf -> vcf)
 # gatk \
