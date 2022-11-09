@@ -127,7 +127,10 @@ gatk VariantFiltration \
 -V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz\
 -O ${temp_dir}/${sample_id}.${Date}..bwamem.haplotype.SnpIndel.filtered.vcf.gz \
 -window 10 \
--filter "DP < 5" --filterName "LowCoverage" --filterExpression "QUAL < 30.0" --filterName "VeryLowQual" --filterExpression "QUAL > 30.0 && QUAL < 50.0" --filterName "LowQual" --filterExpression "QD < 1.5" --filterName "LowQD" 
+-filter "DP < 5" --filter-name "LowCoverage" \
+-filter "QUAL < 30.0" --filter-name "VeryLowQual" \
+-filter "QUAL > 30.0 && QUAL < 50.0" --filter-name "LowQual" \
+-filter "QD < 1.5" --filter-name "LowQD" 
 
 # #exec table_annovar.pl 
 # module load biology/ANNOVAR/2020-06-08
