@@ -129,14 +129,13 @@ cd $workdir
 
 
 
-# ----------------------------------------------
-# STEP 6: Call Variants - gatk haplotype caller
-# ----------------------------------------------
+# # ----------------------------------------------
+# # STEP 6: Call Variants - gatk haplotype caller
+# # ----------------------------------------------
 
-echo "STEP 6: Call Variants - gatk haplotype caller"
+# echo "STEP 6: Call Variants - gatk haplotype caller"
 
-gatk HaplotypeCaller -R ${fasta} -I ${workdir}/SRR062634_sorted_dedup_bqsr_reads.bam -O ${release_dir}/${SampleName}_raw_variants.vcf
-# gatk HaplotypeCaller -R ${fasta} -I ${workdir}/${SampleName}_sorted_dedup_bqsr_reads.bam -O ${release_dir}/${SampleName}_raw_variants.vcf
+# # gatk HaplotypeCaller -R ${fasta} -I ${workdir}/${SampleName}_sorted_dedup_bqsr_reads.bam -O ${release_dir}/${SampleName}_raw_variants.vcf
 
 
 
@@ -145,3 +144,104 @@ gatk HaplotypeCaller -R ${fasta} -I ${workdir}/SRR062634_sorted_dedup_bqsr_reads
 # gatk SelectVariants -R ${ref} -V ${results}/raw_variants.vcf --select-type SNP -O ${results}/raw_snps.vcf
 # gatk SelectVariants -R ${ref} -V ${results}/raw_variants.vcf --select-type INDEL -O ${results}/raw_indels.vcf
 
+
+## to be continued: consolidate GVCF
+# Provide each sample GVCF separately.
+    gatk --java-options "-Xmx4g -Xms4g" GenomicsDBImport \
+      -V data/gvcfs/mother.g.vcf.gz \
+      -V data/gvcfs/father.g.vcf.gz \
+      -V data/gvcfs/son.g.vcf.gz \
+      --genomicsdb-workspace-path my_database \
+      --tmp-dir=/path/to/large/tmp \
+      -L 20
+  
+# Provide sample GVCFs in a map file.
+    gatk --java-options "-Xmx4g -Xms4g" \ #tell Java how much memory it's allowed to work with
+       GenomicsDBImport \
+       --genomicsdb-workspace-path my_database \
+       --batch-size 50 \
+       -L chr1:1000-10000 \
+       --sample-name-map cohort.sample_map \
+       --tmp-dir=/path/to/large/tmp \
+       --reader-threads 5
+
+## to be continued: Joint calling
+# Single-sample GVCF calling (outputs intermediate GVCF)
+ gatk --java-options "-Xmx4g" HaplotypeCaller  \
+   -R Homo_sapiens_assembly38.fasta \
+   -I input.bam \
+   -O output.g.vcf.gz \
+   -ERC GVCF
+ 
+# Single-sample GVCF calling with allele-specific annotations
+ gatk --java-options "-Xmx4g" HaplotypeCaller  \
+   -R Homo_sapiens_assembly38.fasta \
+   -I input.bam \
+   -O output.g.vcf.gz \
+   -ERC GVCF \
+   -G Standard \
+   -G AS_Standard
+ 
+# Variant calling with bamout to show realigned reads
+ gatk --java-options "-Xmx4g" HaplotypeCaller  \
+   -R Homo_sapiens_assembly38.fasta \
+   -I input.bam \
+   -O output.vcf.gz \
+   -bamout bamout.bam
+
+## to be continued: filter
+# Recalibrating SNPs in exome data
+ gatk VariantRecalibrator \
+   -R Homo_sapiens_assembly38.fasta \
+   -V input.vcf.gz \
+   --resource hapmap,known=false,training=true,truth=true,prior=15.0:hapmap_3.3.hg38.sites.vcf.gz \
+   --resource omni,known=false,training=true,truth=false,prior=12.0:1000G_omni2.5.hg38.sites.vcf.gz \
+   --resource 1000G,known=false,training=true,truth=false,prior=10.0:1000G_phase1.snps.high_confidence.hg38.vcf.gz \
+   --resource dbsnp,known=true,training=false,truth=false,prior=2.0:Homo_sapiens_assembly38.dbsnp138.vcf.gz \
+   -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR \
+   -mode SNP \
+   -O output.recal \
+   --tranches-file output.tranches \
+   --rscript-file output.plots.R
+ 
+
+
+# Allele-specific version of the SNP recalibration (beta)
+ gatk VariantRecalibrator \
+   -R Homo_sapiens_assembly38.fasta \
+   -V input.vcf.gz \
+   -AS \
+   --resource hapmap,known=false,training=true,truth=true,prior=15.0:hapmap_3.3.hg38.sites.vcf.gz \
+   --resource omni,known=false,training=true,truth=false,prior=12.0:1000G_omni2.5.hg38.sites.vcf.gz \
+   --resource 1000G,known=false,training=true,truth=false,prior=10.0:1000G_phase1.snps.high_confidence.hg38.vcf.gz \
+   --resource dbsnp,known=true,training=false,truth=false,prior=2.0:Homo_sapiens_assembly38.dbsnp138.vcf.gz \
+   -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR \
+   -mode SNP \
+   -O output.AS.recal \
+   --tranches-file output.AS.tranches \
+   --rscript-file output.plots.AS.R
+
+# Applying recalibration/filtering to SNPs
+ gatk ApplyVQSR \
+   -R Homo_sapiens_assembly38.fasta \
+   -V input.vcf.gz \
+   -O output.vcf.gz \
+   --ts_filter_level 99.0 \
+   --tranches-file output.tranches \
+   --recal-file output.recal \
+   -mode SNP
+ 
+
+
+# Allele-specific version of the SNP filtering (beta)
+ gatk ApplyVQSR \
+   -R Homo_sapiens_assembly38.fasta \
+   -V input.vcf.gz \
+   -O output.vcf.gz \
+   -AS \
+   --ts_filter_level 99.0 \
+   --tranches-file output.AS.tranches \
+   --recal-file output.AS.recal \
+   -mode SNP 
+ 
+## annovar
