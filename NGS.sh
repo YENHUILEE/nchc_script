@@ -135,7 +135,7 @@ module load biology/ANNOVAR/2020-06-08
 
 #exec table_annovar.pl 
 table_annovar.pl \
-${release_dir}/${sample_id}.${Date}.bwamem.filtered.haplotype.SnpIndel.filtered.vcf.gz \
+${release_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.filtered.vcf.gz \
 /staging/reserve/paylong_ntu/AI_SHARE/reference/annovar_2016Feb01/humandb/ \
 -buildver hg19 \
 -out ${release_dir}/${sample_id}.${Date}.annotate \
