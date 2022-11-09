@@ -84,7 +84,7 @@ gatk BaseRecalibrator \
 -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
 -R $fasta \
 -known-sites $dbsnp \
--rf BadCigar -nct 16 \
+-nct 16 \
 -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table
 
 # # ApplyBQSR (to be edited)
