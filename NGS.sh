@@ -48,33 +48,34 @@ set -x
 exec 3<&1 4<&2 #???
 exec >$logfile 2>&1
 
+#module loading#
+module load biology/BWA/0.7.17
+module load biology/Picard/2.27.4
+
 # #bwa mem (fastq -> sam)
-# module load biology/BWA/0.7.17
 # bwa mem \
 # -t 16 -R '@RG\tID:MG244_20220923_bwamem\tLB:MG244_20220923_bwamem\tSM:MG244_20220923_bwamem\tPL:ILLUMINA\' \
 # ${fasta} ${fastq_1} ${fastq_2} \
 # > ${temp_dir}/${sample_id}.${Date}.bwamem.sam 
 
 #Sortsam (sam -> bwamem.bam)#
-module load biology/Picard/2.27.4
 # picard SortSam \
 # INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.sam \
 # OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
 # SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-#MarkDuplication (bwamem.bam->bwamem.marked.bam)#
-picard MarkDuplicates \
-INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
-OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
-METRICS_FILE=${temp_dir}/${sample_id}.${Date}.bwamem_metrics #file to write duplication metrices\
-VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
+# #MarkDuplication (bwamem.bam->bwamem.marked.bam)#
+# picard MarkDuplicates \
+# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
+# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
+# METRICS_FILE=${temp_dir}/${sample_id}.${Date}.bwamem_metrics #file to write duplication metrices\
+# VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-
-# #FixMateInformation (bwamem.marked.realigned.fixed.bam)
-# picard FixMateInformation \
-# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.bam \
-# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam \
-# SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true && 
+#FixMateInformation (bwamem.marked.realigned.fixed.bam)
+picard FixMateInformation \
+INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.bam \
+OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.realigned.fixed.bam \
+SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true && 
 
 # #BaseRecalibrator (bwamem.marked.realigned.fixed.bam.recal_data.grp)
 # ml load biology/GATK/4.2.3.0
