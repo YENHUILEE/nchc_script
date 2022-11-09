@@ -24,8 +24,8 @@ set -euo pipefail
 # Update with the fullpath location of your sample fastq
 fastq_1="${fastq_dir}/${sample_id}*R1*.gz" #NGS1_20170305A.R1.fastq.gz
 fastq_2="${fastq_dir}/${sample_id}*R2*.gz"  #If using Illumina paired data
-sample="SM_"${SampleName}
-group="GP_"${SampleName}
+sample="SM_"${sample_id}
+group="GP_"${sample_id}
 platform="ILLUMINA"
 
 
