@@ -52,6 +52,7 @@ exec >$logfile 2>&1
 module load biology/BWA/0.7.17
 module load biology/Picard/2.27.4
 ml load biology/GATK/4.2.3.0
+module load biology/ANNOVAR/2020-06-08
 
 # #bwa mem (fastq -> sam)
 # bwa mem \
@@ -121,28 +122,27 @@ ml load biology/GATK/4.2.3.0
 # -V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
 # -O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz 
 
-#VariantFiltration (vcf -> filtered.vcf)
-gatk VariantFiltration \
--R $fasta \
--V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz \
--O ${release_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.filtered.vcf.gz \
--window 10 \
--filter "DP < 5" --filter-name "LowCoverage" \
--filter "QUAL < 30.0" --filter-name "VeryLowQual" \
--filter "QUAL > 30.0 && QUAL < 50.0" --filter-name "LowQual" \
--filter "QD < 1.5" --filter-name "LowQD" 
+# #VariantFiltration (vcf -> filtered.vcf)
+# gatk VariantFiltration \
+# -R $fasta \
+# -V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz \
+# -O ${release_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.filtered.vcf.gz \
+# -window 10 \
+# -filter "DP < 5" --filter-name "LowCoverage" \
+# -filter "QUAL < 30.0" --filter-name "VeryLowQual" \
+# -filter "QUAL > 30.0 && QUAL < 50.0" --filter-name "LowQual" \
+# -filter "QD < 1.5" --filter-name "LowQD" 
 
-# #exec table_annovar.pl 
-# module load biology/ANNOVAR/2020-06-08
-# table_annovar.pl \
-# ${temp_dir}/${sample_id}.${Date}..bwamem.filtered.haplotype.SnpIndel.vcf.gz \
-# /staging/reserve/paylong_ntu/AI_SHARE/reference/annovar_2016Feb01/humandb/ \
-# -buildver hg19 \
-# -out ${release_dir}/${sample_id}.${Date}..annotate \
-# -remove \
-# -protocol refGene,cytoBand,knownGene,ensGene,gnomad211_genome,avsnp150,TaiwanBiobank-official,gnomad211_exome,TWB_1497_joing_calling_AF,intervar_20180118,clinvar_20210501,cosmic_coding_GRCh37_v92,cosmic_noncoding_GRCh37_v92,icgc28,dbnsfp41a,cg69,kaviar_20150923,dbscsnv11,spidex,gwava,wgRna,targetScanS \
-# -operation gx,r,gx,gx,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f \
-# -arg '-splicing 10',,,,,,,,,,,,,,,,,,,,, -nastring . -vcfinput -polish --maxgenethread 20 --thread 20 
+#exec table_annovar.pl 
+table_annovar.pl \
+${release_dir}/${sample_id}.${Date}..bwamem.filtered.haplotype.SnpIndel.filtered.vcf.gz \
+/staging/reserve/paylong_ntu/AI_SHARE/reference/annovar_2016Feb01/humandb/ \
+-buildver hg19 \
+-out ${release_dir}/${sample_id}.${Date}..annotate \
+-remove \
+-protocol refGene,cytoBand,knownGene,ensGene,gnomad211_genome,avsnp150,TaiwanBiobank-official,gnomad211_exome,TWB_1497_joing_calling_AF,intervar_20180118,clinvar_20210501,cosmic_coding_GRCh37_v92,cosmic_noncoding_GRCh37_v92,icgc28,dbnsfp41a,cg69,kaviar_20150923,dbscsnv11,spidex,gwava,wgRna,targetScanS \
+-operation gx,r,gx,gx,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f \
+-arg '-splicing 10',,,,,,,,,,,,,,,,,,,,, -nastring . -vcfinput -polish --maxgenethread 20 --thread 20 
 
 
 
