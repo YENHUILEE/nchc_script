@@ -107,7 +107,7 @@ ml load biology/GATK/4.2.3.0
 gatk HaplotypeCaller  \
 -R /home/u1151339/reference/ucsc.hg19.NC_012920.fasta \
 -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
---emitRefConfidence GVCF \
+-ERC GVCF \
 # --variant_index_type LINEAR \
 # --variant_index_parameter 128000  \
 --dbsnp $dbsnp \
