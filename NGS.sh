@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH -p ngs96G
-#SBATCH -c 8
-#SBATCH --mem=16g
+#SBATCH -p ngs48G
+#SBATCH -c 14
+#SBATCH --mem=46g
 #SBATCH -A MST109178
 #SBATCH -J MG244
 #SBATCH -e work/u3003390/err 
