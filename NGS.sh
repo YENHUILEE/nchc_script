@@ -4,9 +4,7 @@
 #SBATCH --mem=92g
 #SBATCH -A MST109178
 #SBATCH -J MG244
-#SBATCH -o /staging/reserve/paylong_ntu/Research/DF/DF_20220923_Research/MG244/MG244_20220923_bwamem_all_out.txt
-#SBATCH -e /staging/reserve/paylong_ntu/Research/DF/DF_20220923_Research/MG244/MG244_20220923_bwamem_all_err.txt
-#SBATCH --mail-user=sharonchiu0104@gmail.com
+#SBATCH --mail-user=k32650805@gmail.com
 #SBATCH --mail-type=FAIL,END
 
 # This code is used for NGS germline variant calling (SNV + Indels)
@@ -20,8 +18,6 @@ user_dir="/work/u3003390/"
 fastq_dir="/work/u3003390/FASTQ" #data fold
 temp_dir="/work/u3003390/TEMP"
 release_dir="/work/u3003390/RESULT"
-
-cd $user_dir
 set -euo pipefail
 
 # Update with the fullpath location of your sample fastq
@@ -50,7 +46,6 @@ logfile=$temp_dir/${Time}_run.log
 set -x
 exec 3<&1 4<&2 #???
 exec >$logfile 2>&1
-
 
 #bwa mem (fastq -> sam)
 module load biology/BWA/0.7.17
