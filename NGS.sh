@@ -110,7 +110,7 @@ gatk HaplotypeCaller  \
 -O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
 -ERC GVCF \
 --dbsnp $dbsnp \
---max_alternate_alleles 30  
+--max-alternate-alleles 30  
 #why 30?
 # --variant_index_type LINEAR \
 # --variant_index_parameter 128000  \
