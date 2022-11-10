@@ -155,7 +155,7 @@ module unload pkg/Anaconda3
 # module load biology/SpliceAI/1.3
 
 spliceai \
--I ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.vcf \
+-I ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno \
 -O ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.vcf \
 -R ${fasta} \
 -A grch37
