@@ -149,6 +149,7 @@ exec >$logfile 2>&1
 # --maxgenethread 20 --thread 20 
 
 #splice ai
+module load biology/Python/3.9.5
 module load biology/SpliceAI/1.3
 module load biology/Tensorflow/2.7.1
 
