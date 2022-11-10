@@ -154,7 +154,7 @@ module load biology/Tensorflow/2.7.1
 module unload pkg/Anaconda3
 # module load biology/SpliceAI/1.3
 
-python spliceai \
+spliceai \
 -I ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.vcf \
 -O ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.vcf \
 -R ${fasta} \
