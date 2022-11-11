@@ -159,11 +159,14 @@ module load biology/Tensorflow/2.7.1
 # -R ${fasta} \
 # -A grch37
 
-module load compiler/gcc/9.4.0
-module load biology/bcftools/1.13
 
-vk vcf2tsv wide ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.vcf 
-#
+# module load compiler/gcc/9.4.0
+# module load biology/bcftools/1.13
+
+# vk vcf2tsv wide ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.vcf 
+gatk VariantsToTable \
+     -V ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.vcf \
+     -O output.table
 
 ############
 # #RealignerTargetCreator (bwamem.marked.bam -> bwamem.marked.bam.intervals)
