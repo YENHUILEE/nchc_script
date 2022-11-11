@@ -49,10 +49,10 @@ exec 3<&1 4<&2 #???
 exec >$logfile 2>&1
 
 # #module loading#
-# module load biology/BWA/0.7.17
-# module load biology/Picard/2.27.4
-# ml load biology/GATK/4.2.3.0
-# module load biology/ANNOVAR/2020-06-08
+module load biology/BWA/0.7.17
+module load biology/Picard/2.27.4
+module load biology/GATK/4.2.3.0
+module load biology/ANNOVAR/2020-06-08
 
 # #bwa mem (fastq -> sam)
 # bwa mem \
