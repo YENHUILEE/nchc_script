@@ -167,7 +167,7 @@ module load biology/bcftools/1.13
 gatk VariantsToTable \
      -V ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.vcf \
      -O ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.tsv \
-     -ASF 
+     -F CHROM -F POS -F TYPE -GF AD  
 
 ############
 # #RealignerTargetCreator (bwamem.marked.bam -> bwamem.marked.bam.intervals)
