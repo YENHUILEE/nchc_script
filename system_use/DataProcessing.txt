@@ -1,0 +1,14 @@
+# 看所有檔案
+du -ahl | grep “.g.vcf” file 1 > file 2
+
+# 去掉第一欄
+awk '!($1="")' file
+
+# 以空白格作為delimiter並留下第二欄輸出
+cut -d ‘ ’ -f 2 file 1 > file 2
+
+#在每一行前面加上字串”prefix”
+awk '$0="prefix"$0' file 1 > file 2
+
+#將一行一個字串變成一個字串空格接下一個字串
+$ awk '$1=$1' ORS=' ' file_with_line_breaks > new_file_with_spaces

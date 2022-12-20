@@ -1,0 +1,18 @@
+#!/usr/bin/sh
+wkdir=/staging/biology/u1272905/Jeff_Variants_2022/WS_WES/output
+SampleList=/staging/biology/u1272905/Jeff_Variants_2022/WS_WES/WS_WES_ID_List.txt
+PIPELINE=/staging/biology/u1272905/Jeff_Variants_2022/WS_WES/VariantClling_Clinical_Sentieon_48G_20221214.sh
+DAY=`date +%Y%m%d`
+
+while read -r ID; 
+	do
+	cd ${wkdir}
+	mkdir -p ${ID}
+	cd ${wkdir}/${ID}
+	rsync ${PIPELINE} ./${DAY}_Sentieon_pipeline_${ID}.sh 
+	sed -i "s|SAMPLE_NAME|${ID}|g" ./${DAY}_Sentieon_pipeline_${ID}.sh
+	
+	sbatch ./${DAY}_Sentieon_pipeline_${ID}.sh
+	sleep 3s
+	cd ${wkdir}
+	done<${SampleList}
