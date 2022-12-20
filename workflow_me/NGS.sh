@@ -61,7 +61,7 @@ bwa mem \
 ${fasta} ${fastq_1} ${fastq_2} \
 > ${temp_dir}/${sample_id}.${Date}.bwamem.sam 
 
-Sortsam (sam -> bwamem.bam)#
+#Sortsam (sam -> bwamem.bam)#
 picard SortSam \
 INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.sam \
 OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
