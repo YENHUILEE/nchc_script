@@ -14,11 +14,12 @@
 echo "processes directories"
 # before start, you should copy the fastq to fastq_folder
 # fold to be set
-sample_id="MG244" #change as you needed
+# change the following fold as you needed
+sample_id="MG244" 
 user_dir="/work/u3003390"
-fastq_dir="/work/u3003390/FASTQ" #data fold
-temp_dir="/work/u3003390/TEMP"
-release_dir="/work/u3003390/RESULT"
+fastq_dir="/work/u3003390/FASTQ" # fold of fastq
+temp_dir="/work/u3003390/TEMP" # fold for temporary file
+release_dir="/work/u3003390/RESULT" # fold for major result file
 set -euo pipefail
 
 # Update with the fullpath location of your sample fastq
@@ -54,120 +55,119 @@ module load biology/Picard/2.27.4
 module load biology/GATK/4.2.3.0
 module load biology/ANNOVAR/2020-06-08
 
-# #bwa mem (fastq -> sam)
-# bwa mem \
-# -t 16 -R '@RG\tID:MG244_20220923_bwamem\tLB:MG244_20220923_bwamem\tSM:MG244_20220923_bwamem\tPL:ILLUMINA\' \
-# ${fasta} ${fastq_1} ${fastq_2} \
-# > ${temp_dir}/${sample_id}.${Date}.bwamem.sam 
+#bwa mem (fastq -> sam)
+bwa mem \
+-t 16 -R '@RG\tID:MG244_20220923_bwamem\tLB:MG244_20220923_bwamem\tSM:MG244_20220923_bwamem\tPL:ILLUMINA\' \
+${fasta} ${fastq_1} ${fastq_2} \
+> ${temp_dir}/${sample_id}.${Date}.bwamem.sam 
 
-#Sortsam (sam -> bwamem.bam)#
-# picard SortSam \
-# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.sam \
-# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
-# SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
+Sortsam (sam -> bwamem.bam)#
+picard SortSam \
+INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.sam \
+OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
+SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-# #MarkDuplication (bwamem.bam->bwamem.marked.bam)#
-# picard MarkDuplicates \
-# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
-# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
-# METRICS_FILE=${temp_dir}/${sample_id}.${Date}.bwamem_metrics #file to write duplication metrices\
-# VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
+#MarkDuplication (bwamem.bam->bwamem.marked.bam)#
+picard MarkDuplicates \
+INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
+OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
+METRICS_FILE=${temp_dir}/${sample_id}.${Date}.bwamem_metrics #file to write duplication metrices\
+VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-# #FixMateInformation (bwamem.marked.fixed.bam)
-# picard FixMateInformation \
-# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
-# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
-# ADD_MATE_CIGAR=true\
-# SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
+#FixMateInformation (bwamem.marked.fixed.bam)
+picard FixMateInformation \
+INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
+OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+ADD_MATE_CIGAR=true\
+SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-#BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
-# gatk BaseRecalibrator \
-# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
-# -R $fasta \
-# -known-sites $dbsnp \
-# -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table
+BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
+gatk BaseRecalibrator \
+-I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+-R $fasta \
+-known-sites $dbsnp \
+-O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table
 
-# # ApplyBQSR (to be edited)
-# gatk ApplyBQSR \
-# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
-# -R $fasta \
-# --bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
-# -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
+# ApplyBQSR (to be edited)
+gatk ApplyBQSR \
+-I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+-R $fasta \
+--bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
+-O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
 
-#SortSam (bwamem.marked.fixed.recal.indexed.bam)
-# picard SortSam \
-# INPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam \
-# OUTPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
-# SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
+SortSam (bwamem.marked.fixed.recal.indexed.bam)
+picard SortSam \
+INPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam \
+OUTPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
+SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-#change name (indexed.bai->indexed.bam.bai)?
-# cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bai \
-#    ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam.bai
+change name (indexed.bai->indexed.bam.bai)?
+cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bai \
+   ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam.bai
 
-# #HaplotypeCaller (bwamem.marked.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
-# gatk HaplotypeCaller  \
-# -R ${fasta} \
-# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
-# -O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
-# -ERC GVCF \
-# --dbsnp $dbsnp \
-# --max-alternate-alleles 30  
-#why 30?
-# --variant_index_type LINEAR \
-# --variant_index_parameter 128000  \
+#HaplotypeCaller (bwamem.marked.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
+gatk HaplotypeCaller  \
+-R ${fasta} \
+-I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
+-O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
+-ERC GVCF \
+--dbsnp $dbsnp \
+--max-alternate-alleles 30  
+why 30?
+--variant_index_type LINEAR \
+--variant_index_parameter 128000  \
 
-# #GenotypeGVCFs (g.vcf -> vcf)
-# gatk  GenotypeGVCFs \
-# -R $fasta \
-# -V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
-# -O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz 
+#GenotypeGVCFs (g.vcf -> vcf)
+gatk  GenotypeGVCFs \
+-R $fasta \
+-V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.g.vcf.gz \
+-O ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz 
 
-# #VariantFiltration (vcf -> filtered.vcf)
-# gatk VariantFiltration \
-# -R $fasta \
-# -V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz \
-# -O ${release_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.filtered.vcf.gz \
-# -window 10 \
-# -filter "DP < 5" --filter-name "LowCoverage" \
-# -filter "QUAL < 30.0" --filter-name "VeryLowQual" \
-# -filter "QUAL > 30.0 && QUAL < 50.0" --filter-name "LowQual" \
-# -filter "QD < 1.5" --filter-name "LowQD" 
+#VariantFiltration (vcf -> filtered.vcf)
+gatk VariantFiltration \
+-R $fasta \
+-V ${temp_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.vcf.gz \
+-O ${release_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.filtered.vcf.gz \
+-window 10 \
+-filter "DP < 5" --filter-name "LowCoverage" \
+-filter "QUAL < 30.0" --filter-name "VeryLowQual" \
+-filter "QUAL > 30.0 && QUAL < 50.0" --filter-name "LowQual" \
+-filter "QD < 1.5" --filter-name "LowQD" 
 
-# #exec table_annovar.pl 
-# table_annovar.pl \
-# ${release_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.filtered.vcf.gz \
-# /staging/reserve/paylong_ntu/AI_SHARE/reference/annovar_2016Feb01/humandb/ \
-# -buildver hg19 \
-# -out ${release_dir}/${sample_id}.${Date}.annotate \
-# -remove \
-# -protocol refGene,cytoBand,knownGene,ensGene,gnomad211_genome,avsnp150,TaiwanBiobank-official,gnomad211_exome,TWB_1497_joing_calling_AF,intervar_20180118,clinvar_20210501,cosmic_coding_GRCh37_v92,cosmic_noncoding_GRCh37_v92,icgc28,dbnsfp41a,cg69,kaviar_20150923,dbscsnv11,spidex,gwava,wgRna,targetScanS \
-# -operation gx,r,gx,gx,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f \
-# -arg '-splicing 10',,,,,,,,,,,,,,,,,,,,, \
-# -nastring . \
-# -vcfinput \
-# -polish \
-# --maxgenethread 20 --thread 20 
+#exec table_annovar.pl 
+table_annovar.pl \
+${release_dir}/${sample_id}.${Date}.bwamem.haplotype.SnpIndel.filtered.vcf.gz \
+/staging/reserve/paylong_ntu/AI_SHARE/reference/annovar_2016Feb01/humandb/ \
+-buildver hg19 \
+-out ${release_dir}/${sample_id}.${Date}.annotate \
+-remove \
+-protocol refGene,cytoBand,knownGene,ensGene,gnomad211_genome,avsnp150,TaiwanBiobank-official,gnomad211_exome,TWB_1497_joing_calling_AF,intervar_20180118,clinvar_20210501,cosmic_coding_GRCh37_v92,cosmic_noncoding_GRCh37_v92,icgc28,dbnsfp41a,cg69,kaviar_20150923,dbscsnv11,spidex,gwava,wgRna,targetScanS \
+-operation gx,r,gx,gx,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f \
+-arg '-splicing 10',,,,,,,,,,,,,,,,,,,,, \
+-nastring . \
+-vcfinput \
+-polish \
+--maxgenethread 20 --thread 20 
 
 #splice ai
-# module load biology/Python/3.9.5
-# module load biology/SpliceAI/1.3
+module load biology/Python/3.9.5
+module load biology/SpliceAI/1.3
 module load biology/Tensorflow/2.7.1
 
-# spliceai \
-# -I ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.vcf \
-# -O ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.vcf \
-# -R ${fasta} \
-# -A grch37
+spliceai \
+-I ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.vcf \
+-O ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.vcf \
+-R ${fasta} \
+-A grch37
 
+# # module load compiler/gcc/9.4.0
+# module load biology/bcftools/1.13
 
-# module load compiler/gcc/9.4.0
-module load biology/bcftools/1.13
-
-# vk vcf2tsv wide ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.vcf 
-gatk VariantsToTable \
-     -V ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.vcf \
-     -O ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.tsv \
-     -F CHROM -F POS -F TYPE -GF AD  
+# # vk vcf2tsv wide ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.vcf 
+# gatk VariantsToTable \
+#      -V ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.vcf \
+#      -O ${release_dir}/${sample_id}.${Date}.annotate.hg19_multianno.spliceai.tsv \
+#      -F CHROM -F POS -F TYPE -GF AD  
 
 ############
 # #RealignerTargetCreator (bwamem.marked.bam -> bwamem.marked.bam.intervals)
