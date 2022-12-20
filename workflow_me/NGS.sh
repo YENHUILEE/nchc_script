@@ -101,7 +101,7 @@ INPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam \
 OUTPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
 SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-change name (indexed.bai->indexed.bam.bai)?
+#change name (indexed.bai->indexed.bam.bai)?
 cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bai \
    ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam.bai
 
