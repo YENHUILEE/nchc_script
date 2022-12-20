@@ -55,55 +55,55 @@ module load biology/Picard/2.27.4
 module load biology/GATK/4.2.3.0
 module load biology/ANNOVAR/2020-06-08
 
-#bwa mem (fastq -> sam)
-bwa mem \
--t 16 -R '@RG\tID:MG244_20220923_bwamem\tLB:MG244_20220923_bwamem\tSM:MG244_20220923_bwamem\tPL:ILLUMINA\' \
-${fasta} ${fastq_1} ${fastq_2} \
-> ${temp_dir}/${sample_id}.${Date}.bwamem.sam 
+# #bwa mem (fastq -> sam)
+# bwa mem \
+# -t 16 -R '@RG\tID:MG244_20220923_bwamem\tLB:MG244_20220923_bwamem\tSM:MG244_20220923_bwamem\tPL:ILLUMINA\' \
+# ${fasta} ${fastq_1} ${fastq_2} \
+# > ${temp_dir}/${sample_id}.${Date}.bwamem.sam 
 
-#Sortsam (sam -> bwamem.bam)#
-picard SortSam \
-INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.sam \
-OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
-SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
+# #Sortsam (sam -> bwamem.bam)#
+# picard SortSam \
+# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.sam \
+# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
+# SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-#MarkDuplication (bwamem.bam->bwamem.marked.bam)#
-picard MarkDuplicates \
-INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
-OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
-METRICS_FILE=${temp_dir}/${sample_id}.${Date}.bwamem_metrics #file to write duplication metrices\
-VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
+# #MarkDuplication (bwamem.bam->bwamem.marked.bam)#
+# picard MarkDuplicates \
+# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.bam \
+# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
+# METRICS_FILE=${temp_dir}/${sample_id}.${Date}.bwamem_metrics #file to write duplication metrices\
+# VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-#FixMateInformation (bwamem.marked.fixed.bam)
-picard FixMateInformation \
-INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
-OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
-ADD_MATE_CIGAR=true\
-SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
+# #FixMateInformation (bwamem.marked.fixed.bam)
+# picard FixMateInformation \
+# INPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.bam \
+# OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+# ADD_MATE_CIGAR=true\
+# SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-# BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
-gatk BaseRecalibrator \
--I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
--R $fasta \
--known-sites $dbsnp \
--O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table
+# # BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
+# gatk BaseRecalibrator \
+# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+# -R $fasta \
+# -known-sites $dbsnp \
+# -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table
 
-# ApplyBQSR (to be edited)
-gatk ApplyBQSR \
--I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
--R $fasta \
---bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
--O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
+# # ApplyBQSR (to be edited)
+# gatk ApplyBQSR \
+# -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
+# -R $fasta \
+# --bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
+# -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
 
-#SortSam (bwamem.marked.fixed.recal.indexed.bam)
-picard SortSam \
-INPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam \
-OUTPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
-SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
+# #SortSam (bwamem.marked.fixed.recal.indexed.bam)
+# picard SortSam \
+# INPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam \
+# OUTPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
+# SORT_ORDER=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-#change name (indexed.bai->indexed.bam.bai)?
-cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bai \
-   ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam.bai
+# #change name (indexed.bai->indexed.bam.bai)?
+# cp ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bai \
+#    ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam.bai
 
 #HaplotypeCaller (bwamem.marked.fixed.recal.indexed.bam -> bwamem.haplotype.SnpIndel.g.vcf.gz)
 gatk HaplotypeCaller  \
@@ -113,7 +113,7 @@ gatk HaplotypeCaller  \
 -ERC GVCF \
 --dbsnp $dbsnp \
 --max-alternate-alleles 30  
-why 30?
+# why 30?
 --variant_index_type LINEAR \
 --variant_index_parameter 128000  \
 
