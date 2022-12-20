@@ -3,7 +3,7 @@
 #SBATCH -c 14
 #SBATCH --mem=46g
 #SBATCH -A MST109178
-#SBATCH -J MG244
+#SBATCH -J SAMPLE_ID
 #SBATCH -e /work/u3003390/err 
 #SBATCH -o /work/u3003390/out
 #SBATCH --mail-user=k32650805@gmail.com
@@ -15,7 +15,7 @@ echo "processes directories"
 # before start, you should copy the fastq to fastq_folder
 # fold to be set
 # change the following fold as you needed
-sample_id="MG244" 
+sample_id=SAMPLE_ID 
 user_dir="/work/u3003390"
 fastq_dir="/work/u3003390/FASTQ" # fold of fastq
 temp_dir="/work/u3003390/TEMP" # fold for temporary file
