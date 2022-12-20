@@ -1,5 +1,5 @@
 #!/usr/bin/sh
-SampleList =/home/u3003390/work/FASTQ/list.text
+SampleList=/home/u3003390/work/FASTQ/list.text
 PIPELINE=/home/u3003390/Script/nchc_script/workflow_me/NGS.sh
 DAY=`date +%Y%m%d`
 
