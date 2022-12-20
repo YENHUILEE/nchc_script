@@ -81,7 +81,7 @@ OUTPUT=${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
 ADD_MATE_CIGAR=true\
 SO=coordinate VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true 
 
-BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
+# BaseRecalibrator (bwamem.marked.fixed.bam.recal_data.grp)
 gatk BaseRecalibrator \
 -I ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam \
 -R $fasta \
@@ -95,7 +95,7 @@ gatk ApplyBQSR \
 --bqsr-recal-file ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.bam.recal_data.table \
 -O ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam
 
-SortSam (bwamem.marked.fixed.recal.indexed.bam)
+#SortSam (bwamem.marked.fixed.recal.indexed.bam)
 picard SortSam \
 INPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.bam \
 OUTPUT= ${temp_dir}/${sample_id}.${Date}.bwamem.marked.fixed.recal.indexed.bam \
