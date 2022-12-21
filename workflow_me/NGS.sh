@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -p ngs48G
+#SBATCH -p ngs92G
 #SBATCH -c 14
 #SBATCH --mem=46g
 #SBATCH -A MST109178
