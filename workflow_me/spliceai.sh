@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -p ngs92G
 #SBATCH -c 14
-#SBATCH --mem=46g
+#SBATCH --mem=92g
 #SBATCH -A MST109178
 #SBATCH -J SAMPLE_ID
 #SBATCH -e /work/u3003390/err 
